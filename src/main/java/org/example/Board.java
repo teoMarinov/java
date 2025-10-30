@@ -76,37 +76,35 @@ public class Board extends JPanel implements ActionListener, KeyListener {
                 int y = r * GameDimensions.TILE_SIZE;
 
                 switch (tileMapChar) {
-                    case 'X':
+                    case 'X' -> {
                         Tile wall = new Tile(x, y, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE, wallImage);
                         walls.add(wall);
-                        break;
-                    case 'b':
+                    }
+                    case 'b' -> {
                         Character blue = new Character(x, y, blueGhostImage);
                         ghosts.add(blue);
-                        break;
-                    case 'o':
+                    }
+                    case 'o' -> {
                         Character orange = new Character(x, y, orangeGhostImage);
                         ghosts.add(orange);
-                        break;
-                    case 'p':
+                    }
+                    case 'p' -> {
                         Character pink = new Character(x, y, pinkGhostImage);
                         ghosts.add(pink);
-                        break;
-                    case 'r':
+                    }
+                    case 'r' -> {
                         Character red = new Character(x, y, redGhostImage);
                         ghosts.add(red);
-                        break;
-                    case 'P':
-                        player = new Player(x, y, pacmanRightImage);
-                        break;
-                    case ' ':
+                    }
+                    case 'P' -> player = new Player(x, y, pacmanRightImage);
+                    case ' ' -> {
                         int foodPositionX = x + 14;
                         int foodPositionY = y + 14;
                         int foodWidth = 4;
                         int foodHeight = 4;
                         Tile food = new Tile(foodPositionX, foodPositionY, foodWidth, foodHeight, null);
                         foods.add(food);
-                        break;
+                    }
                 }
             }
         }
@@ -118,19 +116,19 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(player.getImage(), player.x, player.y, player.width, player.height, null);
+        g.drawImage(player.getImage(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), null);
 
         for (Character ghost : ghosts) {
-            g.drawImage(ghost.getImage(), ghost.x, ghost.y, ghost.width, ghost.height, null);
+            g.drawImage(ghost.getImage(), ghost.getX(), ghost.getY(), ghost.getWidth(), ghost.getHeight(), null);
         }
 
         for (Tile wall : walls) {
-            g.drawImage(wall.getImage(), wall.x, wall.y, wall.width, wall.height, null);
+            g.drawImage(wall.getImage(), wall.getX(), wall.getY(), wall.getWidth(), wall.getHeight(), null);
         }
 
         g.setColor(Color.WHITE);
         for (Tile food : foods) {
-            g.fillRect(food.x, food.y, food.width, food.height);
+            g.fillRect(food.getX(), food.getY(), food.getWidth(), food.getHeight());
         }
         //score
         int halfTileSize = GameDimensions.TILE_SIZE / 2;
@@ -174,8 +172,6 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     private void resetPositions() {
         player.reset();
-        player.setVelocityX(0);
-        player.setVelocityY(0);
 
         for (Character ghost : ghosts) {
             ghost.reset();
@@ -216,7 +212,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
                 // TODO: Fix move ghost logic, now it stops at a wall.
                 if (GameUtils.checkCollision(ghost, wall)) {
                     char newDirection = directions[random.nextInt(4)];
-                    System.out.println("Changing direction: " +  newDirection );
+                    System.out.println("Changing direction: " + newDirection);
                     GameUtils.changeToViableDirection(ghost, newDirection, walls);
                 }
                 GameUtils.moveCharacter(ghost, walls);

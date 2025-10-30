@@ -49,36 +49,39 @@ public class Character extends GameObject {
     }
 
     public void setDirection(char direction) {
-        this.direction = direction;
+        if ("UDLR".indexOf(direction) >= 0) {
+            this.direction = direction;
+        } else {
+            System.out.println("Invalid direction");
+        }
     }
 
-    public void setVelocityX(int velocityX) {
+    private void setVelocityX(int velocityX) {
         this.velocityX = velocityX;
     }
 
-    public void setVelocityY(int velocityY) {
-        char prevDirection = this.direction;
+    private void setVelocityY(int velocityY) {
         this.velocityY = velocityY;
     }
 
     void move() {
-        this.x += this.velocityX;
-        this.y += this.velocityY;
+        setX(getX() + velocityX);
+        setY(getY() + velocityY);
         this.moveBetweenBorders();
     }
 
     private void moveBetweenBorders() {
-        if (this.x > GameDimensions.BOARD_WIDTH) {
-            this.x = 0;
+        if (getX() > GameDimensions.BOARD_WIDTH) {
+            setX(0);
         }
-        if (this.x < 0) {
-            this.x = GameDimensions.BOARD_WIDTH;
+        if (getX() < 0) {
+            setX(GameDimensions.BOARD_WIDTH);
         }
-        if (this.y > GameDimensions.BOARD_HEIGHT) {
-            this.y = 0;
+        if (getY() > GameDimensions.BOARD_HEIGHT) {
+            setY(0);
         }
-        if (this.y < 0) {
-            this.y = GameDimensions.BOARD_HEIGHT;
+        if (getY() < 0) {
+            setY(GameDimensions.BOARD_HEIGHT);
         }
     }
 
@@ -88,22 +91,27 @@ public class Character extends GameObject {
     }
 
     private void updateVelocity() {
-        if (this.direction == 'U') {
-            setVelocityX(0);
-            setVelocityY(-8);
-        } else if (this.direction == 'D') {
-            setVelocityX(0);
-            setVelocityY(8);
-        } else if (this.direction == 'L') {
-            setVelocityX(-8);
-            setVelocityY(0);
-        } else if (this.direction == 'R') {
-            setVelocityX(8);
-            setVelocityY(0);
+        switch (this.direction) {
+            case 'U' -> {
+                setVelocityX(0);
+                setVelocityY(-8);
+            }
+            case 'D' -> {
+                setVelocityX(0);
+                setVelocityY(8);
+            }
+            case 'L' -> {
+                setVelocityX(-8);
+                setVelocityY(0);
+            }
+            case 'R' -> {
+                setVelocityX(8);
+                setVelocityY(0);
+            }
         }
     }
 
-    void revertMove(int x, int y, char direction) {
+    void setlPositionAndDirection(int x, int y, char direction) {
         setX(x);
         setY(y);
         updateDirection(direction);
@@ -112,6 +120,8 @@ public class Character extends GameObject {
     void reset() {
         super.setX(this.startX);
         super.setY(this.startY);
+        setDirection('R');
+        setVelocityX(0);
+        setVelocityY(0);
     }
-
 }

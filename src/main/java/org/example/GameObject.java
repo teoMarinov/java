@@ -1,10 +1,10 @@
 package org.example;
 
 public class GameObject {
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
 
     public GameObject(int x, int y, int width, int height) {
         this.x = x;

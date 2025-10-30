@@ -16,7 +16,7 @@ public class GameUtils {
         for (HashSet<Tile> obstacles : allObstacles) {
             for (Tile obstacle : obstacles) {
                 if (checkCollision(c, obstacle)) {
-                    c.revertMove(prevCharacterX, prevCharacterY, prevCharacterDirection);
+                    c.setlPositionAndDirection(prevCharacterX, prevCharacterY, prevCharacterDirection);
                     break;
                 }
             }
@@ -34,12 +34,12 @@ public class GameUtils {
         for (HashSet<Tile> obstacles : allObstacles) {
             for (GameObject obstacle : obstacles) {
                 if (checkCollision(c, obstacle)) {
-                    c.revertMove(prevCharacterX, prevCharacterY, prevCharacterDirection);
+                    c.setlPositionAndDirection(prevCharacterX, prevCharacterY, prevCharacterDirection);
                     break;
                 }
             }
         }
-        c.revertMove(prevCharacterX, prevCharacterY, c.getDirection());
+        c.setlPositionAndDirection(prevCharacterX, prevCharacterY, c.getDirection());
     }
 
     static boolean checkCollision(GameObject a, GameObject b) {
