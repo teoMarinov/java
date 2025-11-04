@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Entities;
 
 public class GameObject {
     private int x;

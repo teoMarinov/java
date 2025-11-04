@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.Constants.GameDimensions;
+import org.example.Entities.Player;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;

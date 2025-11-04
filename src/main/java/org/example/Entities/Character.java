@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Entities;
+
+import org.example.Constants.GameDimensions;
 
 import java.awt.*;
 
@@ -64,7 +66,7 @@ public class Character extends GameObject {
         this.velocityY = velocityY;
     }
 
-    void move() {
+    public void move() {
         setX(getX() + velocityX);
         setY(getY() + velocityY);
         this.moveBetweenBorders();
@@ -85,7 +87,7 @@ public class Character extends GameObject {
         }
     }
 
-    void updateDirection(char direction) {
+    public void updateDirection(char direction) {
         setDirection(direction);
         updateVelocity();
     }
@@ -111,13 +113,13 @@ public class Character extends GameObject {
         }
     }
 
-    void setlPositionAndDirection(int x, int y, char direction) {
+    public void setlPositionAndDirection(int x, int y, char direction) {
         setX(x);
         setY(y);
         updateDirection(direction);
     }
 
-    void reset() {
+    public void reset() {
         super.setX(this.startX);
         super.setY(this.startY);
         setDirection('R');

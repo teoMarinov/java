@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.Constants.GameDimensions;
+import org.example.Entities.Character;
+import org.example.Entities.Tile;
+import org.example.Utils.GameUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,9 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameUtilsTest {
 
-    private Character character;
+    private org.example.Entities.Character character;
     private Tile rightSideWall;
     private HashSet<Tile> walls;
+    private GameUtils gameUtils;
 
     @BeforeEach
     void setUp() {
@@ -19,22 +24,23 @@ class GameUtilsTest {
         rightSideWall = new Tile(0, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE, null);
         walls = new HashSet<>();
         walls.add(rightSideWall);
+        gameUtils = GameUtils.getInstance();
     }
 
     @Test
     void checkCollisionReturnsTrueForOverlap() {
         Tile collisionTile = new Tile(GameDimensions.TILE_SIZE - 1, GameDimensions.TILE_SIZE - 1, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE, null);
-        assertTrue(GameUtils.checkCollision(character, collisionTile));
+        assertTrue(gameUtils.checkCollision(character, collisionTile));
     }
 
     @Test
     void checkCollisionReturnsFalseForNoOverlap() {
-        assertFalse(GameUtils.checkCollision(character, rightSideWall));
+        assertFalse(gameUtils.checkCollision(character, rightSideWall));
     }
 
     @Test
     void changeToViableDirectionWorksOnNoCollision() {
-        GameUtils.changeToViableDirection(character, 'R', walls);
+        gameUtils.changeToViableDirection(character, 'R', walls);
         assertEquals('R', character.getDirection());
         assertEquals(0, character.getX());
         assertEquals(0, character.getY());
@@ -42,7 +48,7 @@ class GameUtilsTest {
 
     @Test
     void changeToViableDirectionRevertsOnCollision() {
-        GameUtils.changeToViableDirection(character, 'D', walls);
+        gameUtils.changeToViableDirection(character, 'D', walls);
         assertEquals('U', character.getDirection());
         assertEquals(0, character.getX());
         assertEquals(0, character.getY());
@@ -50,8 +56,8 @@ class GameUtilsTest {
 
     @Test
     void moveCharacterWorksOnNoCollision() {
-        GameUtils.changeToViableDirection(character, 'R', walls);
-        GameUtils.moveCharacter(character);
+        gameUtils.changeToViableDirection(character, 'R', walls);
+        gameUtils.moveCharacter(character);
         assertEquals(8, character.getX());
         assertEquals(0, character.getY());
     }
@@ -59,7 +65,7 @@ class GameUtilsTest {
     @Test
     void moveCharacterRevertsOnCollision() {
         character.updateDirection('D');
-        GameUtils.moveCharacter(character, walls);
+        gameUtils.moveCharacter(character, walls);
         assertEquals(0, character.getX());
         assertEquals(0, character.getY());
     }

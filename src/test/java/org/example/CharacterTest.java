@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.Constants.GameDimensions;
+import org.example.Entities.Character;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CharacterTest {
 
-    private Character character;
+    private org.example.Entities.Character character;
     private Image mockImage;
 
     @BeforeEach

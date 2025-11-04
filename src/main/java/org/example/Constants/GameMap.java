@@ -1,10 +1,10 @@
-package org.example;
+package org.example.Constants;
 
-public class GameMap {
+public final class GameMap {
     private GameMap() {
     }
 
-    static final String[] levelOne = {
+    public static final String[] levelOne = {
             "XXXXXXXXXXXXXXXXXXX",
             "X        X        X",
             "X XX XXX X XXX XX X",

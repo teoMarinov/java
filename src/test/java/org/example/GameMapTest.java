@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.Constants.GameMap;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
