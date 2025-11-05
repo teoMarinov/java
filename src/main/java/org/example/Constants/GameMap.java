@@ -4,9 +4,31 @@ public final class GameMap {
     private GameMap() {
     }
 
-    public static final String[] levelOne = {
+    public static final String[][] levels = {{
             "XXXXXXXXXXXXXXXXXXX",
             "X        X        X",
+            "X XX XXX X XXX XX X",
+            "X                 X",
+            "X XX X XXXXX X XX X",
+            "X    X       X    X",
+            "XXXX XXXX XXXX XXXX",
+            "OOOX X       X XOOO",
+            "XXXX X XXRXX X XXXX",
+            "O       BpO       X",
+            "XXXX X XXXXX X XXXX",
+            "OOOX X       X XOOO",
+            "XXXX X XXXXX X XXXX",
+            "X        X        X",
+            "X XX XXX X XXX XX X",
+            "X  X     P     X  X",
+            "XX X X XXXXX X X XX",
+            "X    X   X   X    X",
+            "X XXXXXX X XXXXXX X",
+            "X                 X",
+            "XXXXXXXXXXXXXXXXXXX"
+    }, {
+            " X  X   X X   X  X ",
+            "X XX XXX X XXX XX X",
             "X XX XXX X XXX XX X",
             "X                 X",
             "X XX X XXXXX X XX X",
@@ -26,5 +48,6 @@ public final class GameMap {
             "X XXXXXX X XXXXXX X",
             "X                 X",
             "XXXXXXXXXXXXXXXXXXX"
-    };
+    }};
+
 }

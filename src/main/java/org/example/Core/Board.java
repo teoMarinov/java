@@ -1,11 +1,11 @@
-package org.example.Bin;
+package org.example.Core;
 
 import org.example.Constants.GameDimensions;
 import org.example.Entities.Character;
 import org.example.Entities.Player;
 import org.example.Entities.Tile;
-import org.example.Utils.GameUtils;
-import org.example.Utils.MapLoader;
+import org.example.Shared.GameUtils;
+import org.example.Shared.MapLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +17,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
-    private final GameUtils gameUtils;
+    private final MapLoader mapLoader;
 
     private final Set<Tile> walls;
     private final Set<Tile> foods;
@@ -28,28 +28,27 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     private final char[] directions = {'U', 'D', 'R', 'L'}; // up, down, left, right
     private final Random random = new Random();
 
-    private int score = 0;
-    private int lives = 3;
+
     private boolean gameLost = false;
     private boolean gameWon = false;
     private boolean gamePaused = false;
 
-    Board(Dimension size, Color color, MapLoader mapLoader, GameUtils gameUtils) {
+    Board(Dimension size, Color color) {
         setPreferredSize(size);
         setBackground(color);
         addKeyListener(this);
         setFocusable(true);
 
-        this.walls = mapLoader.getWalls();
-        this.foods = mapLoader.getFoods();
-        this.ghosts = mapLoader.getGhosts();
-        this.player = mapLoader.getPlayer();
+        this.mapLoader = MapLoader.getInstance();
+        this.walls = this.mapLoader.getWalls();
+        this.foods = this.mapLoader.getFoods();
+        this.ghosts = this.mapLoader.getGhosts();
+        this.player = this.mapLoader.getPlayer();
 
-        this.gameUtils = gameUtils;
 
-        for (org.example.Entities.Character ghost : ghosts) {
+        for (Character ghost : ghosts) {
             char newDirection = directions[random.nextInt(4)];
-            this.gameUtils.changeToViableDirection(ghost, newDirection, walls);
+            ghost.updateDirection(newDirection);
         }
         gameLoop = new Timer(50, this);
         gameLoop.start();
@@ -64,7 +63,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     public void draw(Graphics g) {
         g.drawImage(player.getImage(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), null);
 
-        for (org.example.Entities.Character ghost : ghosts) {
+        for (Character ghost : ghosts) {
             g.drawImage(ghost.getImage(), ghost.getX(), ghost.getY(), ghost.getWidth(), ghost.getHeight(), null);
         }
 
@@ -87,7 +86,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         int y = (GameDimensions.BOARD_HEIGHT + textHeight) / 2;
 
         if (gameLost) {
-            String text = "Game Over: " + score;
+            String text = "Game Over: " + player.getScore();
 
             int textWidth = fm.stringWidth(text);
             int x = (GameDimensions.BOARD_WIDTH - textWidth) / 2;
@@ -112,14 +111,14 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             g.drawString(text, x, y);
         } else {
             g.setFont(new Font("Arial", Font.PLAIN, 18));
-            g.drawString("x" + lives + " Score: " + score, halfTileSize, halfTileSize);
+            g.drawString("x" + player.getLives() + " Score: " + player.getScore(), halfTileSize, halfTileSize);
         }
     }
 
     private void resetPositions() {
         player.reset();
 
-        for (org.example.Entities.Character ghost : ghosts) {
+        for (Character ghost : ghosts) {
             ghost.reset();
             char newDirection = directions[random.nextInt(4)];
             ghost.setDirection(newDirection);
@@ -127,10 +126,10 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     }
 
     private void checkForCollisions() {
-        for (org.example.Entities.Character ghost : ghosts) {
-            if (this.gameUtils.checkCollision(player, ghost)) {
-                lives -= 1;
-                if (lives == 0) {
+        for (Character ghost : ghosts) {
+            if (GameUtils.checkCollision(player, ghost)) {
+                player.decreaseLives();
+                if (player.getLives() == 0) {
                     setGameLost(true);
                     return;
                 }
@@ -140,9 +139,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
 
         for (Tile food : foods) {
-            if (this.gameUtils.checkCollision(player, food)) {
+            if (GameUtils.checkCollision(player, food)) {
                 foods.remove(food);
-                score += 10;
+                player.increaseScore(10);
                 break;
             }
         }
@@ -156,12 +155,12 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         for (Character ghost : ghosts) {
             for (Tile wall : walls) {
                 // TODO: Fix move ghost logic, now it stops at a wall.
-                if (this.gameUtils.checkCollision(ghost, wall)) {
+                if (GameUtils.checkCollision(ghost, wall)) {
                     char newDirection = directions[random.nextInt(4)];
                     System.out.println("Changing direction: " + newDirection);
-                    this.gameUtils.changeToViableDirection(ghost, newDirection, walls);
+                    ghost.updateDirection(newDirection);
                 }
-                this.gameUtils.moveCharacter(ghost, walls);
+                ghost.move();
             }
         }
     }
@@ -172,7 +171,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             gameLoop.stop();
         }
 
-        this.gameUtils.moveCharacter(player, walls);
+        player.move();
         moveGhosts();
         checkForCollisions();
         repaint();
@@ -194,14 +193,20 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (gameLost || gameWon) {
-//            loadMap();
             player.reset();
-            lives = 3;
-            score = 0;
+            player.setLives(3);
+            player.setScore(0);
             gameLost = false;
             gameWon = false;
             gamePaused = false;
             gameLoop.start();
+        }
+
+        if (gameLost) {
+            mapLoader.resetLevel();
+        }
+        if (gameWon) {
+            mapLoader.changeLevel(2);
         }
 
         if (!gameLoop.isRunning()) {
@@ -211,10 +216,10 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
 
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP -> this.gameUtils.changeToViableDirection(player, 'U', walls);
-            case KeyEvent.VK_DOWN -> this.gameUtils.changeToViableDirection(player, 'D', walls);
-            case KeyEvent.VK_LEFT -> this.gameUtils.changeToViableDirection(player, 'L', walls);
-            case KeyEvent.VK_RIGHT -> this.gameUtils.changeToViableDirection(player, 'R', walls);
+            case KeyEvent.VK_UP -> player.updateDirection('U');
+            case KeyEvent.VK_DOWN -> player.updateDirection('D');
+            case KeyEvent.VK_LEFT -> player.updateDirection('L');
+            case KeyEvent.VK_RIGHT -> player.updateDirection('R');
             default -> gamePaused = true;
         }
     }

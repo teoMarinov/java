@@ -3,7 +3,7 @@ package org.example;
 import org.example.Constants.GameDimensions;
 import org.example.Entities.Character;
 import org.example.Entities.Tile;
-import org.example.Utils.GameUtils;
+import org.example.Shared.GameUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

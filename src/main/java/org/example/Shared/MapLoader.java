@@ -1,8 +1,9 @@
-package org.example.Utils;
+package org.example.Shared;
 
 import org.example.Constants.GameDimensions;
+import org.example.Constants.GameMap;
 import org.example.Entities.Character;
-import org.example.Entities.Packman;
+import org.example.Entities.Pacman;
 import org.example.Entities.Player;
 import org.example.Entities.Tile;
 
@@ -13,37 +14,35 @@ import java.util.Set;
 public class MapLoader {
     private static MapLoader INSTANCE;
 
-    String[] tileMap;
+    String[] gameMap = GameMap.levels[0];
 
     private final Image wallImage;
     private final Image blueGhostImage;
     private final Image orangeGhostImage;
     private final Image pinkGhostImage;
     private final Image redGhostImage;
-    private final ImageLoader imageLoader;
 
     private final Set<Tile> walls = new HashSet<>();
     private final HashSet<Tile> foods = new HashSet<>();
     private final HashSet<Character> ghosts = new HashSet<>();
     private Player player;
 
-    private MapLoader(String[] tileMap, Image wallImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage, ImageLoader imageLoader) {
-        this.tileMap = tileMap;
+    private MapLoader(Image wallImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
         this.wallImage = wallImage;
         this.blueGhostImage = blueGhostImage;
         this.orangeGhostImage = orangeGhostImage;
         this.pinkGhostImage = pinkGhostImage;
         this.redGhostImage = redGhostImage;
-        this.imageLoader = imageLoader;
 
         loadMap();
     }
 
-    public static synchronized MapLoader init(String[] tileMap, Image wallImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage, ImageLoader imageLoader) {
+    public static synchronized void init(Image wallImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
         if (INSTANCE == null) {
-            INSTANCE = new MapLoader(tileMap, wallImage, blueGhostImage, orangeGhostImage, pinkGhostImage, redGhostImage, imageLoader);
+            INSTANCE = new MapLoader(wallImage, blueGhostImage, orangeGhostImage, pinkGhostImage, redGhostImage);
+        } else {
+            throw new IllegalStateException("MapLoader already initialized");
         }
-        return INSTANCE;
     }
 
     public static MapLoader getInstance() {
@@ -56,7 +55,7 @@ public class MapLoader {
     private void loadMap() {
         for (int r = 0; r < GameDimensions.ROWS; r++) {
             for (int c = 0; c < GameDimensions.COLUMNS; c++) {
-                char tileMapChar = tileMap[r].charAt(c);
+                char tileMapChar = gameMap[r].charAt(c);
 
                 int x = c * GameDimensions.TILE_SIZE;
                 int y = r * GameDimensions.TILE_SIZE;
@@ -82,7 +81,7 @@ public class MapLoader {
                         org.example.Entities.Character red = new org.example.Entities.Character(x, y, redGhostImage);
                         ghosts.add(red);
                     }
-                    case 'P' -> player = new Packman(x, y, imageLoader);
+                    case 'P' -> player = new Pacman(x, y);
                     case ' ' -> {
                         int foodPositionX = x + 14;
                         int foodPositionY = y + 14;
@@ -112,8 +111,19 @@ public class MapLoader {
         return player;
     }
 
-    public void updateTileMap(String[] newTileMap) {
-        this.tileMap = newTileMap;
+    public void changeLevel(int level) {
+        if (level > GameMap.levels.length) {
+            throw new ArrayIndexOutOfBoundsException(level);
+        }
+        this.gameMap = GameMap.levels[level - 1];
+        walls.clear();
+        foods.clear();
+        ghosts.clear();
+        player = null;
+        loadMap();
+    }
+
+    public void resetLevel() {
         walls.clear();
         foods.clear();
         ghosts.clear();

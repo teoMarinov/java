@@ -1,8 +1,11 @@
 package org.example.Entities;
 
 import org.example.Constants.GameDimensions;
+import org.example.Shared.GameUtils;
+import org.example.Shared.MapLoader;
 
 import java.awt.*;
+import java.util.Set;
 
 public class Character extends GameObject {
     private Image image;
@@ -14,6 +17,7 @@ public class Character extends GameObject {
 
     private int velocityX = 0;
     private int velocityY = 0;
+
 
     public Character(int x, int y, Image image) {
         super(x, y, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE);
@@ -67,10 +71,25 @@ public class Character extends GameObject {
     }
 
     public void move() {
+        Set<Tile> obstacles = MapLoader.getInstance().getWalls();
+        int prevX = this.getX();
+        int prevY = this.getY();
+
+        this.changePosition();
+        for (Tile obstacle : obstacles) {
+            if (GameUtils.checkCollision(this, obstacle)) {
+                this.revertMove(prevX, prevY);
+                break;
+            }
+        }
+    }
+
+    private void changePosition() {
         setX(getX() + velocityX);
         setY(getY() + velocityY);
         this.moveBetweenBorders();
     }
+
 
     private void moveBetweenBorders() {
         if (getX() > GameDimensions.BOARD_WIDTH) {
@@ -88,8 +107,22 @@ public class Character extends GameObject {
     }
 
     public void updateDirection(char direction) {
+        Set<Tile> obstacles = MapLoader.getInstance().getWalls();
+        int prevX = this.getX();
+        int prevY = this.getY();
+        char prevDirection = this.getDirection();
+
         setDirection(direction);
         updateVelocity();
+        this.changePosition();
+        for (Tile obstacle : obstacles) {
+            if (GameUtils.checkCollision(this, obstacle)) {
+                this.setDirection(prevDirection);
+                updateVelocity();
+                break;
+            }
+        }
+        this.revertMove(prevX, prevY);
     }
 
     private void updateVelocity() {
@@ -113,10 +146,9 @@ public class Character extends GameObject {
         }
     }
 
-    public void setlPositionAndDirection(int x, int y, char direction) {
+    private void revertMove(int x, int y) {
         setX(x);
         setY(y);
-        updateDirection(direction);
     }
 
     public void reset() {
