@@ -12,8 +12,10 @@ public class Character extends GameObject {
 
     private final int startX;
     private final int startY;
+    private int prevX;
+    private int prevY;
 
-    private char direction = 'U'; // U D L R
+    private char direction = 'R'; // U D L R
 
     private int velocityX = 0;
     private int velocityY = 0;
@@ -70,26 +72,33 @@ public class Character extends GameObject {
         this.velocityY = velocityY;
     }
 
+    public int getPrevX() {
+        return prevX;
+    }
+
+    public int getPrevY() {
+        return prevY;
+    }
+
     public void move() {
         Set<Tile> obstacles = MapLoader.getInstance().getWalls();
-        int prevX = this.getX();
-        int prevY = this.getY();
+        this.prevX = this.getX();
+        this.prevY = this.getY();
 
         this.changePosition();
         for (Tile obstacle : obstacles) {
             if (GameUtils.checkCollision(this, obstacle)) {
-                this.revertMove(prevX, prevY);
+                this.revertMove();
                 break;
             }
         }
     }
 
-    private void changePosition() {
+    public void changePosition() {
         setX(getX() + velocityX);
         setY(getY() + velocityY);
         this.moveBetweenBorders();
     }
-
 
     private void moveBetweenBorders() {
         if (getX() > GameDimensions.BOARD_WIDTH) {
@@ -108,8 +117,8 @@ public class Character extends GameObject {
 
     public void updateDirection(char direction) {
         Set<Tile> obstacles = MapLoader.getInstance().getWalls();
-        int prevX = this.getX();
-        int prevY = this.getY();
+        this.prevX = this.getX();
+        this.prevY = this.getY();
         char prevDirection = this.getDirection();
 
         setDirection(direction);
@@ -122,10 +131,10 @@ public class Character extends GameObject {
                 break;
             }
         }
-        this.revertMove(prevX, prevY);
+        this.revertMove();
     }
 
-    private void updateVelocity() {
+    public void updateVelocity() {
         switch (this.direction) {
             case 'U' -> {
                 setVelocityX(0);
@@ -146,9 +155,9 @@ public class Character extends GameObject {
         }
     }
 
-    private void revertMove(int x, int y) {
-        setX(x);
-        setY(y);
+    public void revertMove() {
+        setX(this.prevX);
+        setY(this.prevY);
     }
 
     public void reset() {

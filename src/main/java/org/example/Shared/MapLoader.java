@@ -2,10 +2,7 @@ package org.example.Shared;
 
 import org.example.Constants.GameDimensions;
 import org.example.Constants.GameMap;
-import org.example.Entities.Character;
-import org.example.Entities.Pacman;
-import org.example.Entities.Player;
-import org.example.Entities.Tile;
+import org.example.Entities.*;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -24,7 +21,7 @@ public class MapLoader {
 
     private final Set<Tile> walls = new HashSet<>();
     private final HashSet<Tile> foods = new HashSet<>();
-    private final HashSet<Character> ghosts = new HashSet<>();
+    private final HashSet<Ghost> ghosts = new HashSet<>();
     private Player player;
 
     private MapLoader(Image wallImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
@@ -66,19 +63,19 @@ public class MapLoader {
                         walls.add(wall);
                     }
                     case 'b' -> {
-                        org.example.Entities.Character blue = new org.example.Entities.Character(x, y, blueGhostImage);
+                        Ghost blue = new Ghost(x, y, blueGhostImage);
                         ghosts.add(blue);
                     }
                     case 'o' -> {
-                        org.example.Entities.Character orange = new org.example.Entities.Character(x, y, orangeGhostImage);
+                        Ghost orange = new Ghost(x, y, orangeGhostImage);
                         ghosts.add(orange);
                     }
                     case 'p' -> {
-                        org.example.Entities.Character pink = new org.example.Entities.Character(x, y, pinkGhostImage);
+                        Ghost pink = new Ghost(x, y, pinkGhostImage);
                         ghosts.add(pink);
                     }
                     case 'r' -> {
-                        org.example.Entities.Character red = new org.example.Entities.Character(x, y, redGhostImage);
+                        Ghost red = new Ghost(x, y, redGhostImage);
                         ghosts.add(red);
                     }
                     case 'P' -> player = new Pacman(x, y);
@@ -103,7 +100,7 @@ public class MapLoader {
         return foods;
     }
 
-    public Set<Character> getGhosts() {
+    public Set<Ghost> getGhosts() {
         return ghosts;
     }
 

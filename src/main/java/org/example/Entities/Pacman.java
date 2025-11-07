@@ -34,4 +34,10 @@ public class Pacman extends Player {
             }
         }
     }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.setImage(pacmanRightImage);
+    }
 }

@@ -2,6 +2,7 @@ package org.example.Core;
 
 import org.example.Constants.GameDimensions;
 import org.example.Entities.Character;
+import org.example.Entities.Ghost;
 import org.example.Entities.Player;
 import org.example.Entities.Tile;
 import org.example.Shared.GameUtils;
@@ -13,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Random;
 import java.util.Set;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
@@ -21,12 +21,10 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
     private final Set<Tile> walls;
     private final Set<Tile> foods;
-    private final Set<org.example.Entities.Character> ghosts;
+    private final Set<Ghost> ghosts;
     private final Player player;
 
     private final Timer gameLoop;
-    private final char[] directions = {'U', 'D', 'R', 'L'}; // up, down, left, right
-    private final Random random = new Random();
 
 
     private boolean gameLost = false;
@@ -45,11 +43,6 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         this.ghosts = this.mapLoader.getGhosts();
         this.player = this.mapLoader.getPlayer();
 
-
-        for (Character ghost : ghosts) {
-            char newDirection = directions[random.nextInt(4)];
-            ghost.updateDirection(newDirection);
-        }
         gameLoop = new Timer(50, this);
         gameLoop.start();
     }
@@ -120,8 +113,6 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
         for (Character ghost : ghosts) {
             ghost.reset();
-            char newDirection = directions[random.nextInt(4)];
-            ghost.setDirection(newDirection);
         }
     }
 
@@ -151,20 +142,6 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
     }
 
-    private void moveGhosts() {
-        for (Character ghost : ghosts) {
-            for (Tile wall : walls) {
-                // TODO: Fix move ghost logic, now it stops at a wall.
-                if (GameUtils.checkCollision(ghost, wall)) {
-                    char newDirection = directions[random.nextInt(4)];
-                    System.out.println("Changing direction: " + newDirection);
-                    ghost.updateDirection(newDirection);
-                }
-                ghost.move();
-            }
-        }
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (gamePaused) {
@@ -172,7 +149,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
 
         player.move();
-        moveGhosts();
+        for (Ghost ghost : ghosts) {
+            ghost.move();
+        }
         checkForCollisions();
         repaint();
         if (gameLost || gameWon) {

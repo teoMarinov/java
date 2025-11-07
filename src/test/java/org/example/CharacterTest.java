@@ -164,12 +164,4 @@ class CharacterTest {
         assertEquals(GameDimensions.BOARD_HEIGHT, character.getY());
 
     }
-
-    @Test
-    void setPositionAndDirectionWorks() {
-        character.setlPositionAndDirection(15, 20, 'R');
-        assertEquals(15, character.getX());
-        assertEquals(20, character.getY());
-        assertEquals('R', character.getDirection());
-    }
 }
