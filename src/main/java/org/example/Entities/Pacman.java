@@ -7,6 +7,7 @@ import java.awt.*;
 
 public class Pacman extends Player {
     private final Image pacmanRightImage, pacmanLeftImage, pacmanDownImage, pacmanUpImage;
+    private char nextDirection;
 
     public Pacman(int x, int y) {
         super(x, y, ImageLoader.load(GameImagePaths.PACMAN_RIGHT));
@@ -17,9 +18,19 @@ public class Pacman extends Player {
         pacmanUpImage = ImageLoader.load(GameImagePaths.PACMAN_UP);
     }
 
+    @Override
+    public void move() {
+        tryChangeDirection();
+        super.move();
+    }
 
     @Override
     public void updateDirection(char direction) {
+        this.nextDirection = direction;
+    }
+
+    private void tryChangeDirection() {
+        char direction = this.nextDirection;
         super.updateDirection(direction);
 
         if (this.getDirection() == direction) {

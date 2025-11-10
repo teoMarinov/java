@@ -80,6 +80,6 @@ public class Ghost extends Character {
     }
 
     private boolean isOutsideTheMap() {
-        return this.getY() < 0 || this.getY() > GameDimensions.BOARD_HEIGHT || this.getX() < 0 || this.getX() > GameDimensions.BOARD_WIDTH;
+        return this.getY() < 0 || this.getY() + this.getHeight() > GameDimensions.BOARD_HEIGHT || this.getX() < 0 || this.getX() + this.getWidth() > GameDimensions.BOARD_WIDTH;
     }
 }
