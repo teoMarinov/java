@@ -7,7 +7,6 @@ import java.awt.*;
 
 public class Pacman extends Player {
     private final Image pacmanRightImage, pacmanLeftImage, pacmanDownImage, pacmanUpImage;
-    private char nextDirection;
 
     public Pacman(int x, int y) {
         super(x, y, ImageLoader.load(GameImagePaths.PACMAN_RIGHT));
@@ -20,29 +19,20 @@ public class Pacman extends Player {
 
     @Override
     public void move() {
-        tryChangeDirection();
         super.move();
+        this.changeImageToDirection();
     }
 
-    @Override
-    public void updateDirection(char direction) {
-        this.nextDirection = direction;
-    }
-
-    private void tryChangeDirection() {
-        char direction = this.nextDirection;
-        super.updateDirection(direction);
-
-        if (this.getDirection() == direction) {
-            if (direction == 'U') {
-                this.setImage(pacmanUpImage);
-            } else if (direction == 'D') {
-                this.setImage(pacmanDownImage);
-            } else if (direction == 'L') {
-                this.setImage(pacmanLeftImage);
-            } else if (direction == 'R') {
-                this.setImage(pacmanRightImage);
-            }
+    private void changeImageToDirection() {
+        char direction = this.getDirection();
+        if (direction == 'U') {
+            this.setImage(pacmanUpImage);
+        } else if (direction == 'D') {
+            this.setImage(pacmanDownImage);
+        } else if (direction == 'L') {
+            this.setImage(pacmanLeftImage);
+        } else if (direction == 'R') {
+            this.setImage(pacmanRightImage);
         }
     }
 

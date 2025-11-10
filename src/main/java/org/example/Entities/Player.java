@@ -5,6 +5,7 @@ import java.awt.*;
 public class Player extends Character {
     private int score = 0;
     private int lives = 3;
+    private char nextDirection;
 
     public Player(int x, int y, Image image) {
         super(x, y, image);
@@ -32,5 +33,16 @@ public class Player extends Character {
 
     public void decreaseLives() {
         this.lives--;
+    }
+
+    @Override
+    public void move() {
+        super.updateDirection(this.nextDirection);
+        super.move();
+    }
+
+    @Override
+    public void updateDirection(char direction) {
+        this.nextDirection = direction;
     }
 }
