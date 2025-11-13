@@ -35,6 +35,10 @@ public class Player extends Character {
         this.lives--;
     }
 
+    public void increaseLives() {
+        this.lives++;
+    }
+
     @Override
     public void move() {
         super.updateDirection(this.nextDirection);

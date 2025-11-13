@@ -14,6 +14,8 @@ public class MapLoader {
     String[] gameMap = GameMap.levels[0];
 
     private final Image wallImage;
+    private final Image cherryImage;
+
     private final Image blueGhostImage;
     private final Image orangeGhostImage;
     private final Image pinkGhostImage;
@@ -24,8 +26,9 @@ public class MapLoader {
     private final HashSet<Ghost> ghosts = new HashSet<>();
     private Player player;
 
-    private MapLoader(Image wallImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
+    private MapLoader(Image wallImage, Image cherryImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
         this.wallImage = wallImage;
+        this.cherryImage = cherryImage;
         this.blueGhostImage = blueGhostImage;
         this.orangeGhostImage = orangeGhostImage;
         this.pinkGhostImage = pinkGhostImage;
@@ -34,9 +37,9 @@ public class MapLoader {
         loadMap();
     }
 
-    public static synchronized void init(Image wallImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
+    public static synchronized void init(Image wallImage, Image cherryImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
         if (INSTANCE == null) {
-            INSTANCE = new MapLoader(wallImage, blueGhostImage, orangeGhostImage, pinkGhostImage, redGhostImage);
+            INSTANCE = new MapLoader(wallImage, cherryImage, blueGhostImage, orangeGhostImage, pinkGhostImage, redGhostImage);
         } else {
             throw new IllegalStateException("MapLoader already initialized");
         }
@@ -59,7 +62,7 @@ public class MapLoader {
 
                 switch (tileMapChar) {
                     case 'X' -> {
-                        Tile wall = new Tile(x, y, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE, wallImage);
+                        Tile wall = new Tile(x, y, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE, wallImage, 0);
                         walls.add(wall);
                     }
                     case 'b' -> {
@@ -79,12 +82,16 @@ public class MapLoader {
                         ghosts.add(red);
                     }
                     case 'P' -> player = new Pacman(x, y);
+                    case 'c' -> {
+                        Tile cherry = new Cherry(x, y, GameDimensions.TILE_SIZE, GameDimensions.TILE_SIZE, cherryImage, 100);
+                        foods.add(cherry);
+                    }
                     case ' ' -> {
                         int foodPositionX = x + 14;
                         int foodPositionY = y + 14;
                         int foodWidth = 4;
                         int foodHeight = 4;
-                        Tile food = new Tile(foodPositionX, foodPositionY, foodWidth, foodHeight, null);
+                        Tile food = new Food(foodPositionX, foodPositionY, foodWidth, foodHeight, 10);
                         foods.add(food);
                     }
                 }

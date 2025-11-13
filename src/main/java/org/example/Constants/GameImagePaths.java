@@ -5,6 +5,7 @@ public final class GameImagePaths {
     }
 
     public static final String WALL = "/images/wall.png";
+    public static final String CHERRY = "/images/cherry2.png";
 
     public static final String GHOST_BLUE = "/images/blueGhost.png";
     public static final String GHOST_ORANGE = "/images/orangeGhost.png";

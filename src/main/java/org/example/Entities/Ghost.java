@@ -75,6 +75,23 @@ public class Ghost extends Character {
         super.updateVelocity();
     }
 
+//    private boolean detectPlayer () {
+//        MapLoader mapLoader = MapLoader.getInstance();
+//        Set<Tile> walls = mapLoader.getWalls();
+//        Player pacman = mapLoader.getPlayer();
+//
+//        // Check if the ghost x and the player x are equal
+//        // If they match that means they align vertically
+//        // Get both player's Ys
+//        // Check if there are any walls with matching X and y between the two
+//        // If yes, then do nothing
+//        // If no change the ghost's direction to move towards the player.
+//        // Additional
+//        if (this.getX() == pacman.getX()) {
+//
+//        }
+//    };
+
     private boolean isMoveViable() {
         return this.getPrevX() != this.getX() || this.getPrevY() != this.getY();
     }

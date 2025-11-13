@@ -1,10 +1,8 @@
 package org.example.Core;
 
 import org.example.Constants.GameDimensions;
+import org.example.Entities.*;
 import org.example.Entities.Character;
-import org.example.Entities.Ghost;
-import org.example.Entities.Player;
-import org.example.Entities.Tile;
 import org.example.Shared.GameUtils;
 import org.example.Shared.MapLoader;
 
@@ -66,7 +64,11 @@ public class Board extends JPanel implements ActionListener, KeyListener {
 
         g.setColor(Color.WHITE);
         for (Tile food : foods) {
-            g.fillRect(food.getX(), food.getY(), food.getWidth(), food.getHeight());
+            if (food instanceof Cherry) {
+                g.drawImage(food.getImage(), food.getX(), food.getY(), food.getWidth(), food.getHeight(), null);
+            } else {
+                g.fillRect(food.getX(), food.getY(), food.getWidth(), food.getHeight());
+            }
         }
         //score
         int halfTileSize = GameDimensions.TILE_SIZE / 2;
@@ -132,7 +134,10 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         for (Tile food : foods) {
             if (GameUtils.checkCollision(player, food)) {
                 foods.remove(food);
-                player.increaseScore(10);
+                player.increaseScore(food.getScore());
+                if (food instanceof Cherry && player.getLives() < 3) {
+                    player.increaseLives();
+                }
                 break;
             }
         }

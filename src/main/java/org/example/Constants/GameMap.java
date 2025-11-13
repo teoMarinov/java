@@ -8,7 +8,7 @@ public final class GameMap {
             "XXXXXXXXXXXXXXXXXXX",
             "X        X        X",
             "X XX XXX X XXX XX X",
-            "X                 X",
+            "X     c           X",
             "X XX X XXXXX X XX X",
             "X    X       X    X",
             "XXXX XXXX XXXX XXXX",
@@ -20,11 +20,11 @@ public final class GameMap {
             "XXXX X XXXXX X XXXX",
             "X        X        X",
             "X XX XXX X XXX XX X",
-            "X  X     P     X  X",
+            "X  X     P     X cX",
             "XX X X XXXXX X X XX",
             "X    X   X   X    X",
             "X XXXXXX X XXXXXX X",
-            "X                 X",
+            "X           c     X",
             "XXXXXXXXXXXXXXXXXXX"
     }, {
             " X  X   X X   X  X ",

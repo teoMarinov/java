@@ -131,6 +131,7 @@ public class Character extends GameObject {
                 break;
             }
         }
+
         this.revertMove();
     }
 
