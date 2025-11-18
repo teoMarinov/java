@@ -1,6 +1,7 @@
 package org.example.Shared;
 
 import org.example.Constants.GameDimensions;
+import org.example.Constants.GameImagePaths;
 import org.example.Constants.GameMap;
 import org.example.Entities.*;
 
@@ -9,46 +10,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MapLoader {
-    private static MapLoader INSTANCE;
+    private static final MapLoader INSTANCE = new MapLoader();
 
     String[] gameMap = GameMap.levels[0];
 
-    private final Image wallImage;
-    private final Image cherryImage;
+    private final Image wallImage = ImageLoader.load(GameImagePaths.WALL);
+    private final Image cherryImage = ImageLoader.load(GameImagePaths.CHERRY);
 
-    private final Image blueGhostImage;
-    private final Image orangeGhostImage;
-    private final Image pinkGhostImage;
-    private final Image redGhostImage;
+    private final Image blueGhostImage = ImageLoader.load(GameImagePaths.GHOST_BLUE);
+    private final Image orangeGhostImage = ImageLoader.load(GameImagePaths.GHOST_ORANGE);
+    private final Image pinkGhostImage = ImageLoader.load(GameImagePaths.GHOST_PINK);
+    private final Image redGhostImage = ImageLoader.load(GameImagePaths.GHOST_RED);
 
     private final Set<Tile> walls = new HashSet<>();
     private final HashSet<Tile> foods = new HashSet<>();
     private final HashSet<Ghost> ghosts = new HashSet<>();
     private Player player;
 
-    private MapLoader(Image wallImage, Image cherryImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
-        this.wallImage = wallImage;
-        this.cherryImage = cherryImage;
-        this.blueGhostImage = blueGhostImage;
-        this.orangeGhostImage = orangeGhostImage;
-        this.pinkGhostImage = pinkGhostImage;
-        this.redGhostImage = redGhostImage;
-
+    private MapLoader() {
         loadMap();
     }
 
-    public static synchronized void init(Image wallImage, Image cherryImage, Image blueGhostImage, Image orangeGhostImage, Image pinkGhostImage, Image redGhostImage) {
-        if (INSTANCE == null) {
-            INSTANCE = new MapLoader(wallImage, cherryImage, blueGhostImage, orangeGhostImage, pinkGhostImage, redGhostImage);
-        } else {
-            throw new IllegalStateException("MapLoader already initialized");
-        }
-    }
-
     public static MapLoader getInstance() {
-        if (INSTANCE == null) {
-            throw new IllegalStateException("MapLoader not initialized. Call init(...) first.");
-        }
         return INSTANCE;
     }
 

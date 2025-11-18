@@ -1,31 +1,11 @@
 package org.example.Core;
 
 import org.example.Constants.GameDimensions;
-import org.example.Constants.GameImagePaths;
-import org.example.Shared.ImageLoader;
-import org.example.Shared.MapLoader;
-
 import javax.swing.JFrame;
 import java.awt.*;
 
 public class Game {
     public Game() {
-        Image wallImage = ImageLoader.load(GameImagePaths.WALL);
-        Image cherryImage = ImageLoader.load(GameImagePaths.CHERRY);
-
-        Image blueGhostImage = ImageLoader.load(GameImagePaths.GHOST_BLUE);
-        Image orangeGhostImage = ImageLoader.load(GameImagePaths.GHOST_ORANGE);
-        Image pinkGhostImage = ImageLoader.load(GameImagePaths.GHOST_PINK);
-        Image redGhostImage = ImageLoader.load(GameImagePaths.GHOST_RED);
-
-        MapLoader.init(
-                wallImage,
-                cherryImage,
-                blueGhostImage,
-                orangeGhostImage,
-                pinkGhostImage,
-                redGhostImage
-        );
     }
 
     public void run() {
