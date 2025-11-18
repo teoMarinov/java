@@ -103,11 +103,7 @@ public class MapLoader {
             throw new ArrayIndexOutOfBoundsException(level);
         }
         this.gameMap = GameMap.levels[level - 1];
-        walls.clear();
-        foods.clear();
-        ghosts.clear();
-        player = null;
-        loadMap();
+        this.resetLevel();
     }
 
     public void resetLevel() {

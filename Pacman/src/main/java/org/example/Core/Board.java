@@ -180,17 +180,15 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             player.reset();
             player.setLives(3);
             player.setScore(0);
-            gameLost = false;
-            gameWon = false;
-            gamePaused = false;
-            gameLoop.start();
         }
 
         if (gameLost) {
             mapLoader.resetLevel();
+            setGameLost(false);
         }
         if (gameWon) {
             mapLoader.changeLevel(2);
+            setGameWon(false);
         }
 
         if (!gameLoop.isRunning()) {
